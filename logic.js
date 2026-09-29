@@ -12,6 +12,22 @@ export function getLineContext(text, cursor) {
   return { lineIndex, lineStart, lineEnd };
 }
 
+export function moveCurrentLineToTop(text, cursor) {
+  const { lineIndex, lineStart, lineEnd } = getLineContext(text, cursor);
+
+  // The current line is already at the top.
+  if (lineIndex === 0) return { text, cursor: Math.max(0, Math.min(cursor, lineEnd)) };
+
+  const line = text.slice(lineStart, lineEnd);
+  const before = text.slice(0, lineStart);
+  const after = text.slice(lineEnd);
+
+  // lineStart is immediately after the separator before this line. Remove
+  // that separator along with the line, then prepend the line to the document.
+  const remaining = before.slice(0, -1) + after;
+  return { text: `${line}\n${remaining}`, cursor: Math.min(cursor - lineStart, line.length) };
+}
+
 export function shouldPushLineToTop(text, selectionStart, selectionEnd = selectionStart) {
   if (selectionStart !== selectionEnd) return false;
 
