@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f7f7" />
+    <title>ReverseNotepad</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%232563eb%22/><path d=%22M18 18h28v6H18zm0 11h28v6H18zm0 11h18v6H18z%22 fill=%22white%22/></svg>" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="titlebar">
+        <div class="brand"><span class="brand-icon" aria-hidden="true">R</span><strong>ReverseNotepad</strong><span id="dirty-mark" class="dirty-mark" title="Unsaved changes"></span></div>
+        <div class="title-actions">
+          <span id="save-state">Saved locally</span>
+          <button id="theme-toggle" class="icon-button" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
+        </div>
+      </header>
+
+      <nav class="menubar" aria-label="Application menu">
+        <div class="menu"><button class="menu-trigger" aria-expanded="false">File</button><div class="menu-popover">
+          <button data-action="new">New <kbd>Ctrl+N</kbd></button><button data-action="open">Open… <kbd>Ctrl+O</kbd></button><hr />
+          <button data-action="save">Save <kbd>Ctrl+S</kbd></button><button data-action="save-as">Save As…</button><hr /><button data-action="print">Print… <kbd>Ctrl+P</kbd></button>
+        </div></div>
+        <div class="menu"><button class="menu-trigger" aria-expanded="false">Edit</button><div class="menu-popover wide">
+          <button data-action="undo">Undo <kbd>Ctrl+Z</kbd></button><button data-action="redo">Redo <kbd>Ctrl+Y</kbd></button><hr />
+          <button data-action="cut">Cut <kbd>Ctrl+X</kbd></button><button data-action="copy">Copy <kbd>Ctrl+C</kbd></button><button data-action="paste">Paste <kbd>Ctrl+V</kbd></button><button data-action="delete">Delete <kbd>Del</kbd></button><hr />
+          <button data-action="find">Find &amp; Replace… <kbd>Ctrl+H</kbd></button><button data-action="select-all">Select All <kbd>Ctrl+A</kbd></button><button data-action="date">Time/Date <kbd>F5</kbd></button>
+        </div></div>
+        <div class="menu"><button class="menu-trigger" aria-expanded="false">Format</button><div class="menu-popover format-menu">
+          <label class="check-row"><input id="word-wrap" type="checkbox" checked /> Word Wrap</label><hr />
+          <label>Font family<select id="font-family"><option>Consolas</option><option>Arial</option><option>Georgia</option><option>Courier New</option><option>Verdana</option></select></label>
+          <label>Font size<select id="font-size"><option>14</option><option selected>16</option><option>18</option><option>20</option><option>24</option><option>32</option></select></label>
+        </div></div>
+        <div class="menu"><button class="menu-trigger" aria-expanded="false">View</button><div class="menu-popover">
+          <button data-action="zoom-in">Zoom In <kbd>Ctrl++</kbd></button><button data-action="zoom-out">Zoom Out <kbd>Ctrl+-</kbd></button><button data-action="zoom-reset">Restore Zoom <kbd>Ctrl+0</kbd></button><hr />
+          <label class="check-row"><input id="status-toggle" type="checkbox" checked /> Status Bar</label>
+        </div></div>
+      </nav>
+
+      <section class="entry-strip" aria-label="Quick entry">
+        <span class="stack-arrow" aria-hidden="true">↑</span>
+        <div><strong>New entries land here</strong><span>Press Enter to push this line onto the top of your note</span></div>
+      </section>
+      <textarea id="editor" autofocus spellcheck="true" aria-label="ReverseNotepad editor" placeholder="Start typing… Press Enter to stack a new line at the top."></textarea>
+      <footer id="status-bar" class="statusbar" aria-live="polite">
+        <span id="line-position">Ln 1, Col 1</span><span id="line-count">0 lines</span><span id="word-count">0 words</span><span id="char-count">0 characters</span><span class="status-spacer"></span><span>UTF-8</span><span id="zoom-level">100%</span>
+      </footer>
+    </main>
+
+    <dialog id="find-dialog">
+      <form method="dialog" class="dialog-card"><header><div><strong>Find &amp; Replace</strong><p>Search within your note</p></div><button value="cancel" class="dialog-close" aria-label="Close">×</button></header>
+        <label>Find<input id="find-input" type="text" autocomplete="off" /></label><label>Replace with<input id="replace-input" type="text" autocomplete="off" /></label>
+        <div class="dialog-options"><label><input id="match-case" type="checkbox" /> Match case</label><label><input id="reverse-search" type="checkbox" /> Search upward</label></div>
+        <p id="find-message" class="find-message" aria-live="polite"></p>
+        <footer><button type="button" id="find-next">Find next</button><button type="button" id="replace-one">Replace</button><button type="button" id="replace-all" class="primary">Replace all</button></footer>
+      </form>
+    </dialog>
+    <input id="file-input" type="file" accept=".txt,text/plain" hidden />
+    <script type="module" src="/src.js"></script>
+  </body>
+</html>
