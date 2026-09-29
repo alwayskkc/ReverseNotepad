@@ -1,7 +1,22 @@
 export function pushLineToTop(text) {
-  // Enter always creates a fresh Line 1. The previous contents are preserved
-  // verbatim and become older entries below it, regardless of cursor position.
   return { text: `\n${text}`, cursor: 0 };
+}
+
+export function getLineContext(text, cursor) {
+  const position = Math.max(0, Math.min(cursor, text.length));
+  const lineStart = text.lastIndexOf('\n', position - 1) + 1;
+  const nextNewline = text.indexOf('\n', position);
+  const lineEnd = nextNewline === -1 ? text.length : nextNewline;
+  const lineIndex = text.slice(0, lineStart).split('\n').length - 1;
+
+  return { lineIndex, lineStart, lineEnd };
+}
+
+export function shouldPushLineToTop(text, selectionStart, selectionEnd = selectionStart) {
+  if (selectionStart !== selectionEnd) return false;
+
+  const { lineIndex, lineEnd } = getLineContext(text, selectionStart);
+  return lineIndex === 0 && selectionStart === lineEnd;
 }
 
 export function textStats(text) {

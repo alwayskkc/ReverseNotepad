@@ -1,4 +1,4 @@
-import { pushLineToTop, readTextFile, serializeText, textStats } from './logic.js';
+import { pushLineToTop, readTextFile, serializeText, shouldPushLineToTop, textStats } from './logic.js';
 
 const $ = (selector) => document.querySelector(selector);
 const editor = $('#editor');
@@ -80,13 +80,15 @@ document.querySelectorAll('[data-action]').forEach((button) => button.addEventLi
 document.addEventListener('click', closeMenus);
 
 editor.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
+  if (event.key === 'Enter' && !event.shiftKey && shouldPushLineToTop(editor.value, editor.selectionStart, editor.selectionEnd)) {
     event.preventDefault();
     const result = pushLineToTop(editor.value);
     editor.value = result.text;
     editor.setSelectionRange(result.cursor, result.cursor);
     autosave();
   }
+  // In every other position, leave Enter to the textarea so it performs the
+  // normal inline split and the input event below records the change.
 });
 editor.addEventListener('input', autosave);
 editor.addEventListener('keyup', updateStatus);
