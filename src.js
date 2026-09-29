@@ -1,4 +1,4 @@
-import { pushLineToTop, readTextFile, serializeText, shouldPushLineToTop, textStats } from './logic.js';
+import { moveCurrentLineToTop, pushLineToTop, readTextFile, serializeText, shouldPushLineToTop, textStats } from './logic.js';
 
 const $ = (selector) => document.querySelector(selector);
 const editor = $('#editor');
@@ -80,7 +80,13 @@ document.querySelectorAll('[data-action]').forEach((button) => button.addEventLi
 document.addEventListener('click', closeMenus);
 
 editor.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey && shouldPushLineToTop(editor.value, editor.selectionStart, editor.selectionEnd)) {
+  if (event.key === 'Enter' && event.shiftKey) {
+    event.preventDefault();
+    const result = moveCurrentLineToTop(editor.value, editor.selectionStart);
+    editor.value = result.text;
+    editor.setSelectionRange(result.cursor, result.cursor);
+    autosave();
+  } else if (event.key === 'Enter' && shouldPushLineToTop(editor.value, editor.selectionStart, editor.selectionEnd)) {
     event.preventDefault();
     const result = pushLineToTop(editor.value);
     editor.value = result.text;
