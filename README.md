@@ -1,6 +1,6 @@
 # ReverseNotepad
 
-A browser-based text editor inspired by Windows Notepad, with one important twist: pressing **Enter** commits the current entry to the top of the note. New thoughts stay at line 1 while older ones move down.
+A browser-based text editor inspired by Windows Notepad, with one important twist: pressing **Enter** creates a fresh Line 1 and pushes the current entry down. New thoughts are always typed at the top while older ones move down.
 
 ## Run locally
 

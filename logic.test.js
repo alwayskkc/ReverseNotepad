@@ -2,11 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { pushLineToTop, readTextFile, serializeText, textStats } from './logic.js';
 
 describe('reverse stack behavior', () => {
-  it('moves a completed bottom line to the top', () => {
-    expect(pushLineToTop('older\nnewest', 12)).toEqual({ text: 'newest\nolder', cursor: 0 });
+  it('creates an empty first line and pushes the current entry down', () => {
+    expect(pushLineToTop('newest')).toEqual({ text: '\nnewest', cursor: 0 });
   });
-  it('keeps a top entry at the top and opens a fresh line', () => {
-    expect(pushLineToTop('new thought\nold thought', 11).text).toBe('new thought\nold thought');
+  it('preserves the entire existing stack in its original order', () => {
+    expect(pushLineToTop('new thought\nold thought')).toEqual({ text: '\nnew thought\nold thought', cursor: 0 });
+  });
+  it('also creates a new first line for an empty document', () => {
+    expect(pushLineToTop('')).toEqual({ text: '\n', cursor: 0 });
   });
   it('reports document statistics', () => {
     expect(textStats('hello world\nagain')).toEqual({ lines: 2, words: 3, characters: 17 });

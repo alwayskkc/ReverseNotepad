@@ -80,7 +80,13 @@ document.querySelectorAll('[data-action]').forEach((button) => button.addEventLi
 document.addEventListener('click', closeMenus);
 
 editor.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); const result = pushLineToTop(editor.value, editor.selectionStart, editor.selectionEnd); editor.value = result.text; editor.setSelectionRange(0, 0); autosave(); }
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    const result = pushLineToTop(editor.value);
+    editor.value = result.text;
+    editor.setSelectionRange(result.cursor, result.cursor);
+    autosave();
+  }
 });
 editor.addEventListener('input', autosave);
 editor.addEventListener('keyup', updateStatus);
